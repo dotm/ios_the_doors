@@ -11,14 +11,14 @@ import GameplayKit
 
 class GameScene: SKScene {
     
-    private var leftDoor : SKShapeNode!
-    private var rightDoor : SKShapeNode!
-    private var centerDoor : SKShapeNode!
+    private var leftDoor : SKSpriteNode!
+    private var rightDoor : SKSpriteNode!
+    private var centerDoor : SKSpriteNode!
     
     override func didMove(to view: SKView) {
-        self.leftDoor = self.childNode(withName: "leftDoor") as! SKShapeNode
-        self.rightDoor = self.childNode(withName: "rightDoor") as! SKShapeNode
-        self.centerDoor = self.childNode(withName: "centerDoor") as! SKShapeNode
+        leftDoor = self.childNode(withName: "leftDoor") as! SKSpriteNode
+        rightDoor = self.childNode(withName: "rightDoor") as! SKSpriteNode
+        centerDoor = self.childNode(withName: "centerDoor") as! SKSpriteNode
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
