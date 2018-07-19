@@ -11,16 +11,21 @@ import SpriteKit
 import GameplayKit
 
 class GameViewController: UIViewController {
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         if let view = self.view as! SKView? {
             // Load the SKScene from 'GameScene.sks'
-            if let scene = SKScene(fileNamed: "GameScene") {
+            guard let scene = GameScene(fileNamed: "GameScene") else {
+                fatalError("No scene found #860")
+            }
+            if true {
                 // Set the scale mode to scale to fit the window
                 scene.scaleMode = .aspectFill
                 
+                scene.gameController = self
                 // Present the scene
                 view.presentScene(scene)
             }
@@ -50,3 +55,17 @@ class GameViewController: UIViewController {
         return true
     }
 }
+
+protocol GameController {
+    func goTo_startScene()
+    func gameOver()
+}
+extension GameViewController: GameController {
+    func goTo_startScene() {
+        print("To Start Scene")
+    }
+    func gameOver() {
+        print("Game Over")
+    }
+}
+

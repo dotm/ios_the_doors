@@ -17,6 +17,8 @@ class GameScene: SKScene {
     private var cameraNode: SKCameraNode!
     private var blackCover: SKShapeNode!
     
+    var gameController: GameController?
+    
     override func didMove(to view: SKView) {
         leftDoor = self.childNode(withName: "leftDoor") as! SKSpriteNode
         rightDoor = self.childNode(withName: "rightDoor") as! SKSpriteNode
