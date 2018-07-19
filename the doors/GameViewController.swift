@@ -96,9 +96,17 @@ extension GameViewController: GameController {
     
     func guessDoor(_ door: DoorGuess){
         playerGuesses.append(door)
-        if(playerGuesses != correctGuesses){
+        if(!allGuesses_areCorrect()){
             gameOver()
         }
+    }
+    func allGuesses_areCorrect() -> Bool{
+        for i in 0..<playerGuesses.count {
+            if playerGuesses[i] != correctGuesses[i] {
+                return false
+            }
+        }
+        return true
     }
 }
 

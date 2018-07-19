@@ -49,12 +49,15 @@ class GameScene: SKScene {
     }
     
     private func touchLeftDoor(){
+        gameController?.guessLeftDoor()
         enterDoor(leftDoor)
     }
     private func touchCenterDoor(){
+        gameController?.guessCenterDoor()
         enterDoor(centerDoor)
     }
     private func touchRightDoor(){
+        gameController?.guessRightDoor()
         enterDoor(rightDoor)
     }
     private func enterDoor(_ door: SKNode, duration: TimeInterval = 3.0){
