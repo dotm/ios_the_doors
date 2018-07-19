@@ -31,20 +31,54 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
         
         startRound(round)
-        print(correctGuesses)
-        goTo_gameScene()
     }
     func startRound(_ round: Int){
         let initialGuess = 5
         let addition_forEachRound = 2
         
-        fill_rightGuesses(totalGuess: initialGuess + ((round - 1) * addition_forEachRound))
+        let totalGuesses = initialGuess + ((round - 1) * addition_forEachRound)
+        fill_rightGuesses(totalGuesses: totalGuesses)
+        
+        goTo_startScene()
+        
+        var delay: Double {
+            switch round {
+            case 0...5: return 5.0
+            case 5...10: return 4.0
+            default: return 3.0
+            }
+        }
+        goTo_gameScene(delay: delay)
     }
-    func fill_rightGuesses(totalGuess: Int){
+    func fill_rightGuesses(totalGuesses: Int){
         correctGuesses = []
-        for _ in 0..<totalGuess {
+        for _ in 0..<totalGuesses {
             let door = DoorGuess.randomGuess()
             correctGuesses.append(door)
+        }
+    }
+    func goTo_startScene(){
+        if let view = self.view as! SKView? {
+            // Load the SKScene from 'GameScene.sks'
+            let filename = "GameStartScene"
+            guard let scene = GameStartScene(fileNamed: filename) else {
+                fatalError("\(filename) not found!")
+            }
+            if true {
+                scene.scaleMode = .aspectFill   // Set the scale mode to scale to fit the window
+                
+                scene.gameController = self
+                scene.hints = correctGuesses
+                
+                view.presentScene(scene)
+            }
+            
+            view.ignoresSiblingOrder = true
+        }
+    }
+    func goTo_gameScene(delay: Double){
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            self.goTo_gameScene()
         }
     }
     func goTo_gameScene(){
@@ -52,13 +86,16 @@ class GameViewController: UIViewController {
         
         if let view = self.view as! SKView? {
             // Load the SKScene from 'GameScene.sks'
-            guard let scene = GameScene(fileNamed: "GameScene") else {
-                fatalError("No GameScene found #860")
+            let filename = "GameScene"
+            guard let scene = GameScene(fileNamed: filename) else {
+                fatalError("\(filename) not found!")
             }
             if true {
                 scene.scaleMode = .aspectFill   // Set the scale mode to scale to fit the window
                 scene.gameController = self
-                view.presentScene(scene)
+                
+                let revealScene = SKTransition.reveal(with: .up, duration: 1)
+                view.presentScene(scene, transition: revealScene)
             }
             
             view.ignoresSiblingOrder = true
@@ -66,6 +103,7 @@ class GameViewController: UIViewController {
     }
     func gameOver(){
         print("Game Over")
+        //go to game over scene
     }
 
     //MARK: Display Settings
@@ -96,11 +134,17 @@ extension GameViewController: GameController {
     
     func guessDoor(_ door: DoorGuess){
         playerGuesses.append(door)
-        if(!allGuesses_areCorrect()){
+        if(!playerGuesses_areCorrect()){
             gameOver()
         }
+        
+        let allGuesses_areCorrect = playerGuesses == correctGuesses
+        if(allGuesses_areCorrect){
+            round += 1
+            startRound(round)
+        }
     }
-    func allGuesses_areCorrect() -> Bool{
+    func playerGuesses_areCorrect() -> Bool{
         for i in 0..<playerGuesses.count {
             if playerGuesses[i] != correctGuesses[i] {
                 return false
