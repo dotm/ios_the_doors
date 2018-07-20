@@ -9,6 +9,7 @@
 import UIKit
 import SpriteKit
 import GameplayKit
+import AVFoundation
 
 enum DoorGuess: Int {
     case left, center, right
@@ -23,6 +24,9 @@ enum DoorGuess: Int {
 }
 
 class GameViewController: UIViewController {
+    private var bgmPlayer: AVAudioPlayer!
+    private var introSFX: AVAudioPlayer!
+    private var playerOpenDoorSFX: AVAudioPlayer!
     private var correctGuesses: [DoorGuess]! = []
     private var playerGuesses: [DoorGuess]! = []
     private var round = 1
@@ -30,8 +34,45 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        loadPlayerForBGM()
+        let infinity = -1
+        bgmPlayer.numberOfLoops = infinity
+        bgmPlayer.volume = 0.01
+        bgmPlayer.play()
+        bgmPlayer.setVolume(0.5, fadeDuration: 20)
+        
+        loadPlayerForSoundEffect()
+        introSFX.play()
+        
         startRound(round)
     }
+    
+    func loadPlayerForBGM(){
+        guard let backgroundMusicData = NSDataAsset(name: "bgm")?.data else { return }
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+            try AVAudioSession.sharedInstance().setActive(true)
+            
+            /* The following line is required for the player to work on iOS 11. */
+            bgmPlayer = try AVAudioPlayer(data: backgroundMusicData, fileTypeHint: AVFileType.mp3.rawValue)
+            /* iOS 10 and earlier require the following line:
+             player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3) */
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    func loadPlayerForSoundEffect(){
+        do {
+            let introSFXData = NSDataAsset(name: "introSFX")!.data
+            introSFX = try AVAudioPlayer(data: introSFXData, fileTypeHint: AVFileType.mp3.rawValue)
+            
+            let playerOpenDoorSFXData = NSDataAsset(name: "playerOpenDoorSFX")!.data
+            playerOpenDoorSFX = try AVAudioPlayer(data: playerOpenDoorSFXData, fileTypeHint: AVFileType.mp3.rawValue)
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
     func startRound(_ round: Int){
         let initialGuess = 5
         let totalGuesses: Int = {
@@ -148,6 +189,8 @@ protocol GameController {
     func guessLeftDoor()
     func guessRightDoor()
     func guessCenterDoor()
+    func playSFX_playerOpenDoor()
+    func playSFX_playerOpenDoor(delay: TimeInterval)
 }
 extension GameViewController: GameController {
     func guessLeftDoor() { guessDoor(.left) }
@@ -173,6 +216,12 @@ extension GameViewController: GameController {
             }
         }
         return true
+    }
+    func playSFX_playerOpenDoor(){
+        playSFX_playerOpenDoor(delay: 0)
+    }
+    func playSFX_playerOpenDoor(delay: TimeInterval) {
+        playerOpenDoorSFX.play(atTime: playerOpenDoorSFX.deviceCurrentTime + delay)
     }
 }
 

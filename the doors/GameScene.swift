@@ -34,11 +34,14 @@ class GameScene: SKScene {
         cameraNode.setScale(1.5)
         blackCover.alpha = 1
         
-        let animationDuration = 1.0
+        let animationDuration = 1.3
         let zoomInAction = SKAction.scale(to: 1, duration: animationDuration)
         cameraNode.run(zoomInAction)
         let uncover = SKAction.fadeAlpha(to: 0, duration: animationDuration)
         blackCover.run(uncover)
+        
+        
+        gameController?.playSFX_playerOpenDoor(delay: 1.2)  //delayed to sync with animation
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -80,6 +83,7 @@ class GameScene: SKScene {
         cameraNode.run(enterDoorAnimation) {
             self.resetCameraPosition()
         }
+        gameController?.playSFX_playerOpenDoor()
     }
     private func resetCameraPosition(){
         let duration = 0.1
