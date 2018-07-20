@@ -64,14 +64,13 @@ class GameViewController: UIViewController {
             guard let scene = GameStartScene(fileNamed: filename) else {
                 fatalError("\(filename) not found!")
             }
-            if true {
-                scene.scaleMode = .aspectFill   // Set the scale mode to scale to fit the window
-                
-                scene.gameController = self
-                scene.hints = correctGuesses
-                
-                view.presentScene(scene)
-            }
+            
+            scene.scaleMode = .aspectFill   // Set the scale mode to scale to fit the window
+            
+            scene.gameController = self
+            scene.hints = correctGuesses
+            
+            view.presentScene(scene)
             
             view.ignoresSiblingOrder = true
         }
@@ -90,19 +89,38 @@ class GameViewController: UIViewController {
             guard let scene = GameScene(fileNamed: filename) else {
                 fatalError("\(filename) not found!")
             }
-            if true {
-                scene.scaleMode = .aspectFill   // Set the scale mode to scale to fit the window
-                scene.gameController = self
-                
-                let revealScene = SKTransition.reveal(with: .up, duration: 1)
-                view.presentScene(scene, transition: revealScene)
+            
+            scene.scaleMode = .aspectFill   // Set the scale mode to scale to fit the window
+            scene.gameController = self
+            
+            let revealScene = SKTransition.reveal(with: .up, duration: 1)
+            view.presentScene(scene, transition: revealScene)
+            
+            view.ignoresSiblingOrder = true
+        }
+    }
+    func goTo_gameOverScene(){
+        playerGuesses.removeAll()
+        
+        if let view = self.view as! SKView? {
+            // Load the SKScene from 'GameOverScene.sks'
+            let filename = "GameOverScene"
+            guard let scene = GameOverScene(fileNamed: filename) else {
+                fatalError("\(filename) not found!")
             }
+
+            scene.scaleMode = .aspectFill   // Set the scale mode to scale to fit the window
+            scene.gameController = self
+            
+            let revealScene = SKTransition.reveal(with: .down, duration: 1)
+            view.presentScene(scene, transition: revealScene)
             
             view.ignoresSiblingOrder = true
         }
     }
     func gameOver(){
         print("Game Over")
+        goTo_gameOverScene()
         //go to game over scene
     }
 
