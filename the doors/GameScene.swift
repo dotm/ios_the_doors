@@ -16,6 +16,8 @@ class GameScene: SKScene {
     private var centerDoor: SKSpriteNode!
     private var cameraNode: SKCameraNode!
     private var blackCover: SKShapeNode!
+    private var killerComesTimer: Timer!
+    private var deathTimer: Timer!
     
     var gameController: GameController?
     
@@ -40,8 +42,31 @@ class GameScene: SKScene {
         let uncover = SKAction.fadeAlpha(to: 0, duration: animationDuration)
         blackCover.run(uncover)
         
+        let delay_toSyncWith_animation = 1.2
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay_toSyncWith_animation) {
+            self.gameController?.playSFX_playerOpenDoor()
+            self.init_Timers()
+        }
+    }
+    
+    func init_Timers(){
+        if killerComesTimer != nil {
+            killerComesTimer.invalidate()
+        }
+        if deathTimer != nil {
+            deathTimer.invalidate()
+        }
+
+        let time_whenKillerComes = 7.0
+        killerComesTimer = Timer.scheduledTimer(withTimeInterval: time_whenKillerComes, repeats: false) { (timer) in
+            self.gameController?.playSFX_killerOpenDoor()
+        }
         
-        gameController?.playSFX_playerOpenDoor(delay: 1.2)  //delayed to sync with animation
+        let killerOpenDoor_time = 5.0
+        let gameOverTime = time_whenKillerComes + killerOpenDoor_time + 2.0
+        deathTimer = Timer.scheduledTimer(withTimeInterval: gameOverTime, repeats: false, block: { (timer) in
+            self.gameController?.gameOver()
+        })
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -84,6 +109,7 @@ class GameScene: SKScene {
             self.resetCameraPosition()
         }
         gameController?.playSFX_playerOpenDoor()
+        init_Timers()
     }
     private func resetCameraPosition(){
         let duration = 0.1

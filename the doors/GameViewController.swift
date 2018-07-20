@@ -192,7 +192,6 @@ protocol GameController {
     func guessCenterDoor()
     
     func playSFX_playerOpenDoor()
-    func playSFX_playerOpenDoor(delay: TimeInterval)
     func playSFX_killerOpenDoor()
 }
 extension GameViewController: GameController {
@@ -227,10 +226,7 @@ extension GameViewController: GameController {
     }
     
     func playSFX_playerOpenDoor(){
-        playSFX_playerOpenDoor(delay: 0)
-    }
-    func playSFX_playerOpenDoor(delay: TimeInterval) {
-        playerOpenDoorSFX.play(atTime: playerOpenDoorSFX.deviceCurrentTime + delay)
+        playerOpenDoorSFX.play()
     }
     func playSFX_killerOpenDoor() {
         killerOpenDoorSFX.play()
