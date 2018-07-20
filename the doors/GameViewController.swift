@@ -117,8 +117,7 @@ class GameViewController: UIViewController {
             scene.scaleMode = .aspectFill   // Set the scale mode to scale to fit the window
             scene.gameController = self
             
-            let revealScene = SKTransition.reveal(with: .down, duration: 1)
-            view.presentScene(scene, transition: revealScene)
+            view.presentScene(scene)
             
             view.ignoresSiblingOrder = true
         }
