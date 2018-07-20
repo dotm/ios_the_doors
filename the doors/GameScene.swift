@@ -30,6 +30,15 @@ class GameScene: SKScene {
         cameraNode.position = CGPoint(x: 0, y: 0)
         self.addChild(cameraNode)
         self.camera = cameraNode
+
+        cameraNode.setScale(1.5)
+        blackCover.alpha = 1
+        
+        let animationDuration = 1.0
+        let zoomInAction = SKAction.scale(to: 1, duration: animationDuration)
+        cameraNode.run(zoomInAction)
+        let uncover = SKAction.fadeAlpha(to: 0, duration: animationDuration)
+        blackCover.run(uncover)
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
