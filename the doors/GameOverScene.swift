@@ -10,5 +10,5 @@ import SpriteKit
 import GameplayKit
 
 class GameOverScene: SKScene {
-    var gameController: GameController?
+    weak var gameController: GameController?
 }
