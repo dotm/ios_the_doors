@@ -37,7 +37,7 @@ class GameViewController: UIViewController {
         let totalGuesses: Int = {
             switch round {
             case 0...1: return initialGuess
-            case 2...5: return initialGuess + 2
+            case 2...3: return initialGuess + 2
             default: return initialGuess + 5
             }
         }()
@@ -47,8 +47,8 @@ class GameViewController: UIViewController {
         
         var delay: Double {
             switch round {
-            case 0...5: return 5.0
-            case 5...10: return 4.0
+            case 0...3: return 5.0
+            case 3...5: return 4.0
             default: return 3.0
             }
         }
