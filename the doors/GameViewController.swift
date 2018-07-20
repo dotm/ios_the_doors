@@ -34,9 +34,13 @@ class GameViewController: UIViewController {
     }
     func startRound(_ round: Int){
         let initialGuess = 5
-        let addition_forEachRound = 2
-        
-        let totalGuesses = initialGuess + ((round - 1) * addition_forEachRound)
+        let totalGuesses: Int = {
+            switch round {
+            case 0...1: return initialGuess
+            case 2...5: return initialGuess + 2
+            default: return initialGuess + 5
+            }
+        }()
         fill_rightGuesses(totalGuesses: totalGuesses)
         
         goTo_startScene()
@@ -70,7 +74,8 @@ class GameViewController: UIViewController {
             scene.gameController = self
             scene.hints = correctGuesses
             
-            view.presentScene(scene)
+            let revealScene = SKTransition.reveal(with: .up, duration: 1)
+            view.presentScene(scene, transition: revealScene)
             
             view.ignoresSiblingOrder = true
         }
