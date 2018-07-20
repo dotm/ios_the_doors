@@ -11,7 +11,7 @@ import GameplayKit
 
 class GameStartScene: SKScene {
     var hints: [DoorGuess]!
-    weak var gameController: GameController?
+    var gameController: GameController?
     
     override func didMove(to view: SKView) {
         print(hints)

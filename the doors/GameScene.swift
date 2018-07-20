@@ -11,11 +11,11 @@ import GameplayKit
 
 class GameScene: SKScene {
     
-    private weak var leftDoor: SKSpriteNode!
-    private weak var rightDoor: SKSpriteNode!
-    private weak var centerDoor: SKSpriteNode!
-    private weak var cameraNode: SKCameraNode!
-    private weak var blackCover: SKShapeNode!
+    private var leftDoor: SKSpriteNode!
+    private var rightDoor: SKSpriteNode!
+    private var centerDoor: SKSpriteNode!
+    private var cameraNode: SKCameraNode!
+    private var blackCover: SKShapeNode!
     
     var gameController: GameController?
     
