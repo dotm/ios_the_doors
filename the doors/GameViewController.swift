@@ -27,6 +27,7 @@ class GameViewController: UIViewController {
     private var bgmPlayer: AVAudioPlayer!
     private var introSFX: AVAudioPlayer!
     private var playerOpenDoorSFX: AVAudioPlayer!
+    private var killerOpenDoorSFX: AVAudioPlayer!
     private var correctGuesses: [DoorGuess]! = []
     private var playerGuesses: [DoorGuess]! = []
     private var round = 1
@@ -68,6 +69,9 @@ class GameViewController: UIViewController {
             
             let playerOpenDoorSFXData = NSDataAsset(name: "playerOpenDoorSFX")!.data
             playerOpenDoorSFX = try AVAudioPlayer(data: playerOpenDoorSFXData, fileTypeHint: AVFileType.mp3.rawValue)
+            
+            let killerOpenDoorSFXData = NSDataAsset(name: "killerOpenDoorSFX")!.data
+            killerOpenDoorSFX = try AVAudioPlayer(data: killerOpenDoorSFXData, fileTypeHint: AVFileType.mp3.rawValue)
         } catch {
             print(error.localizedDescription)
         }
@@ -163,12 +167,7 @@ class GameViewController: UIViewController {
             view.ignoresSiblingOrder = true
         }
     }
-    func gameOver(){
-        print("Game Over")
-        goTo_gameOverScene()
-        //go to game over scene
-    }
-
+    
     //MARK: Display Settings
     override var shouldAutorotate: Bool {
         return true
@@ -186,13 +185,22 @@ class GameViewController: UIViewController {
 }
 
 protocol GameController {
+    func gameOver()
+    
     func guessLeftDoor()
     func guessRightDoor()
     func guessCenterDoor()
+    
     func playSFX_playerOpenDoor()
     func playSFX_playerOpenDoor(delay: TimeInterval)
+    func playSFX_killerOpenDoor()
 }
 extension GameViewController: GameController {
+    func gameOver(){
+        print("Game Over")
+        goTo_gameOverScene()
+    }
+
     func guessLeftDoor() { guessDoor(.left) }
     func guessCenterDoor() { guessDoor(.center) }
     func guessRightDoor() { guessDoor(.right) }
@@ -217,11 +225,16 @@ extension GameViewController: GameController {
         }
         return true
     }
+    
     func playSFX_playerOpenDoor(){
         playSFX_playerOpenDoor(delay: 0)
     }
     func playSFX_playerOpenDoor(delay: TimeInterval) {
         playerOpenDoorSFX.play(atTime: playerOpenDoorSFX.deviceCurrentTime + delay)
     }
+    func playSFX_killerOpenDoor() {
+        killerOpenDoorSFX.play()
+    }
+    
 }
 
