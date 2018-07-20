@@ -74,7 +74,7 @@ class GameViewController: UIViewController {
             scene.gameController = self
             scene.hints = correctGuesses
             
-            let revealScene = SKTransition.reveal(with: .up, duration: 1)
+            let revealScene = SKTransition.fade(withDuration: 3)
             view.presentScene(scene, transition: revealScene)
             
             view.ignoresSiblingOrder = true
@@ -98,7 +98,7 @@ class GameViewController: UIViewController {
             scene.scaleMode = .aspectFill   // Set the scale mode to scale to fit the window
             scene.gameController = self
             
-            let revealScene = SKTransition.reveal(with: .up, duration: 1)
+            let revealScene = SKTransition.fade(withDuration: 3)
             view.presentScene(scene, transition: revealScene)
             
             view.ignoresSiblingOrder = true

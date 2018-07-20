@@ -49,18 +49,18 @@ class GameScene: SKScene {
     }
     
     private func touchLeftDoor(){
-        gameController?.guessLeftDoor()
         enterDoor(leftDoor)
+        gameController?.guessLeftDoor()
     }
     private func touchCenterDoor(){
-        gameController?.guessCenterDoor()
         enterDoor(centerDoor)
+        gameController?.guessCenterDoor()
     }
     private func touchRightDoor(){
-        gameController?.guessRightDoor()
         enterDoor(rightDoor)
+        gameController?.guessRightDoor()
     }
-    private func enterDoor(_ door: SKNode, duration: TimeInterval = 3.0){
+    private func enterDoor(_ door: SKNode, duration: TimeInterval = 2.0){
         let zoomInAction = SKAction.scale(to: 0.2, duration: duration)
         let moveCenter_toDoor = SKAction.move(to: door.position, duration: duration)
         
