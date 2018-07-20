@@ -20,18 +20,17 @@ class GameStartScene: SKScene {
         }
     }
     func addHintSprite(_ index: Int){
-        let boxSideLength = 50.0
-        let boxSize = CGSize(width: boxSideLength, height: boxSideLength)
         let box: SKSpriteNode = {
             switch hints[index] {
-            case .left: return SKSpriteNode(color: .red, size: boxSize)
-            case .center: return SKSpriteNode(color: .green, size: boxSize)
-            case .right: return SKSpriteNode(color: .blue, size: boxSize)
+            case .left: return SKSpriteNode(imageNamed: "leftArrow")
+            case .center: return SKSpriteNode(imageNamed: "upArrow")
+            case .right: return SKSpriteNode(imageNamed: "rightArrow")
             }
         }()
+        let boxWidth = Double(box.frame.width)
         
         let median = getMedianPosition(array: hints)
-        let xPosition = ((Double(index) - median) * 60) + (boxSideLength / 2)
+        let xPosition = ((Double(index) - median) * 60) + (boxWidth / 2)
         box.position = CGPoint(x: xPosition, y: 0)
         
         box.name = "box_1"
