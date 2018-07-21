@@ -12,15 +12,17 @@ import AVFoundation
 
 class GameOverScene: SKScene {
     private var gameOverWall: SKSpriteNode!
+    private var blackCover: SKShapeNode!
     private var deathBlood: SKSpriteNode!
     private var impendingDeath_SFXArray: [AVAudioPlayer] = []
     private var death_SFXArray: [AVAudioPlayer] = []
     var gameController: GameController?
-    var enableReplayingGame = false
+    private var enableReplayingGame = false
     
     override func didMove(to view: SKView) {
         enableReplayingGame = false
         
+        blackCover = self.childNode(withName: "blackCover") as! SKShapeNode
         gameOverWall = self.childNode(withName: "gameOverWall") as! SKSpriteNode
         deathBlood = self.childNode(withName: "deathBlood") as! SKSpriteNode
         deathBlood.alpha = 0
@@ -28,7 +30,10 @@ class GameOverScene: SKScene {
         loadImpendingDeathSFXS()
         loadDeathSFXS()
         
-        let impendingDeathDelay = 0.0
+        let glitchInterval = 1.0
+        glitchScreen(interval: glitchInterval)
+        
+        let impendingDeathDelay = glitchInterval + 0.5
         Timer.scheduledTimer(withTimeInterval: impendingDeathDelay, repeats: false) { (timer) in
             self.playImpendingDeathSFXS()
         }
@@ -49,6 +54,19 @@ class GameOverScene: SKScene {
         }
     }
     
+    private func glitchScreen(interval glitchInterval: Double){
+        let blinkInterval = 0.1
+        let glitchTimer = Timer.scheduledTimer(withTimeInterval: blinkInterval, repeats: true) { (timer) in
+            self.blackCover.alpha = 1
+            let uncover = SKAction.fadeAlpha(to: 0, duration: 0.001)
+            self.blackCover.run(uncover)
+        }
+        
+        Timer.scheduledTimer(withTimeInterval: glitchInterval, repeats: false) { (timer) in
+            glitchTimer.invalidate()
+            self.blackCover.alpha = 0
+        }
+    }
     func loadImpendingDeathSFXS(){
         do {
             let objectBroken_SFXData = NSDataAsset(name: "objectBrokenSFX")!.data
