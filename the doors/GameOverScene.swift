@@ -11,18 +11,32 @@ import GameplayKit
 import AVFoundation
 
 class GameOverScene: SKScene {
+    private var gameOverWall: SKSpriteNode!
     private var impendingDeath_SFXArray: [AVAudioPlayer] = []
     private var death_SFXArray: [AVAudioPlayer] = []
-    
     var gameController: GameController?
+    var enableReplayingGame = false
     
     override func didMove(to view: SKView) {
+        enableReplayingGame = false
+        
+        gameOverWall = self.childNode(withName: "gameOverWall") as! SKSpriteNode
+        
         loadAndPlay_impendingDeathSFXS()
         loadDeathSFXS()
         
         let deathDelay = 3.0
         Timer.scheduledTimer(withTimeInterval: deathDelay, repeats: false) { (timer) in
             self.playDeathSFXS()
+        }
+        
+        let longestDeathSFX_duration: Double = {
+            let sfxs_duration: [Double] = death_SFXArray.map({ (sfx) -> Double in sfx.duration })
+            return sfxs_duration.max()!
+        }()
+        let enableReplayGame_delay = deathDelay + longestDeathSFX_duration + 1.0
+        Timer.scheduledTimer(withTimeInterval: enableReplayGame_delay, repeats: false) { (timer) in
+            self.enableReplayingGame = true
         }
     }
     
@@ -62,5 +76,19 @@ class GameOverScene: SKScene {
         
         death_SFXArray.forEach { (sfx) in sfx.play() }
         gameController?.stopBGM()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first!
+        let position_inScene = touch.location(in: self)
+        let touchedNodes = self.nodes(at: position_inScene)
+        
+        touchedNodes.forEach { (node) in
+            let name = node.name
+            switch name {
+            case "gameOverWall": if enableReplayingGame { gameController?.startGame() }
+            default: break
+            }
+        }
     }
 }

@@ -36,18 +36,24 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
         
         loadPlayerForBGM()
+        loadPlayerForSoundEffect()
+        
+        startGame()
+    }
+    func startGame(){
+        print("Game Start")
+        
         let infinity = -1
         bgmPlayer.numberOfLoops = infinity
         bgmPlayer.volume = 0.01
         bgmPlayer.play()
         bgmPlayer.setVolume(0.5, fadeDuration: 20)
         
-        loadPlayerForSoundEffect()
         introSFX.play()
         
+        round = 1
         startRound(round)
     }
-    
     func loadPlayerForBGM(){
         guard let backgroundMusicData = NSDataAsset(name: "bgm")?.data else { return }
         do {
@@ -185,6 +191,7 @@ class GameViewController: UIViewController {
 }
 
 protocol GameController {
+    func startGame()
     func gameOver()
     
     func guessLeftDoor()
