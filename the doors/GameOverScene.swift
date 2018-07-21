@@ -25,7 +25,7 @@ class GameOverScene: SKScene {
         loadImpendingDeathSFXS()
         loadDeathSFXS()
         
-        let impendingDeathDelay = 3.0
+        let impendingDeathDelay = 0.0
         Timer.scheduledTimer(withTimeInterval: impendingDeathDelay, repeats: false) { (timer) in
             self.playImpendingDeathSFXS()
         }
