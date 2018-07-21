@@ -12,6 +12,7 @@ import AVFoundation
 
 class GameOverScene: SKScene {
     private var gameOverWall: SKSpriteNode!
+    private var deathBlood: SKSpriteNode!
     private var impendingDeath_SFXArray: [AVAudioPlayer] = []
     private var death_SFXArray: [AVAudioPlayer] = []
     var gameController: GameController?
@@ -21,6 +22,8 @@ class GameOverScene: SKScene {
         enableReplayingGame = false
         
         gameOverWall = self.childNode(withName: "gameOverWall") as! SKSpriteNode
+        deathBlood = self.childNode(withName: "deathBlood") as! SKSpriteNode
+        deathBlood.alpha = 0
         
         loadImpendingDeathSFXS()
         loadDeathSFXS()
@@ -32,6 +35,7 @@ class GameOverScene: SKScene {
         
         let deathDelay = impendingDeathDelay + 3.0
         Timer.scheduledTimer(withTimeInterval: deathDelay, repeats: false) { (timer) in
+            self.deathBlood.alpha = 1
             self.playDeathSFXS()
         }
         
