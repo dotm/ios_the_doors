@@ -40,6 +40,7 @@ class GameOverScene: SKScene {
         
         let deathDelay = impendingDeathDelay + 3.0
         Timer.scheduledTimer(withTimeInterval: deathDelay, repeats: false) { (timer) in
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
             self.deathBlood.alpha = 1
             self.playDeathSFXS()
         }
