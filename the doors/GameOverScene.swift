@@ -22,10 +22,15 @@ class GameOverScene: SKScene {
         
         gameOverWall = self.childNode(withName: "gameOverWall") as! SKSpriteNode
         
-        loadAndPlay_impendingDeathSFXS()
+        loadImpendingDeathSFXS()
         loadDeathSFXS()
         
-        let deathDelay = 3.0
+        let impendingDeathDelay = 3.0
+        Timer.scheduledTimer(withTimeInterval: impendingDeathDelay, repeats: false) { (timer) in
+            self.playImpendingDeathSFXS()
+        }
+        
+        let deathDelay = impendingDeathDelay + 3.0
         Timer.scheduledTimer(withTimeInterval: deathDelay, repeats: false) { (timer) in
             self.playDeathSFXS()
         }
@@ -40,7 +45,7 @@ class GameOverScene: SKScene {
         }
     }
     
-    func loadAndPlay_impendingDeathSFXS(){
+    func loadImpendingDeathSFXS(){
         do {
             let objectBroken_SFXData = NSDataAsset(name: "objectBrokenSFX")!.data
             let objectBrokenSFX = try AVAudioPlayer(data: objectBroken_SFXData, fileTypeHint: AVFileType.mp3.rawValue)
@@ -49,10 +54,12 @@ class GameOverScene: SKScene {
             let heartBeatSFX = try AVAudioPlayer(data: heartBeat_SFXData, fileTypeHint: AVFileType.mp3.rawValue)
             
             impendingDeath_SFXArray = [objectBrokenSFX, heartBeatSFX]
-            impendingDeath_SFXArray.forEach { (sfx) in sfx.play() }
         } catch {
             print(error.localizedDescription)
         }
+    }
+    func playImpendingDeathSFXS(){
+        impendingDeath_SFXArray.forEach { (sfx) in sfx.play() }
     }
     func loadDeathSFXS(){
         do {
