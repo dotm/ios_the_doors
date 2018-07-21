@@ -197,6 +197,7 @@ protocol GameController {
     func guessLeftDoor()
     func guessRightDoor()
     func guessCenterDoor()
+    func playerGuesses_areCorrect() -> Bool
     
     func playSFX_playerOpenDoor()
     func playSFX_killerOpenDoor()
@@ -215,15 +216,15 @@ extension GameViewController: GameController {
     
     func guessDoor(_ door: DoorGuess){
         playerGuesses.append(door)
-        if(!playerGuesses_areCorrect()){
-            gameOver()
-        }
         
         let allGuesses_areCorrect = playerGuesses == correctGuesses
         if(allGuesses_areCorrect){
-            round += 1
-            startRound(round)
+            goToNextRound()
         }
+    }
+    func goToNextRound(){
+        round += 1
+        startRound(round)
     }
     func playerGuesses_areCorrect() -> Bool{
         for i in 0..<playerGuesses.count {

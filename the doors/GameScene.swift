@@ -18,10 +18,13 @@ class GameScene: SKScene {
     private var blackCover: SKShapeNode!
     private var killerComesTimer: Timer!
     private var deathTimer: Timer!
+    private var doors_areLocked = false
     
     var gameController: GameController?
     
     override func didMove(to view: SKView) {
+        doors_areLocked = false
+        
         leftDoor = self.childNode(withName: "leftDoor") as! SKSpriteNode
         rightDoor = self.childNode(withName: "rightDoor") as! SKSpriteNode
         centerDoor = self.childNode(withName: "centerDoor") as! SKSpriteNode
@@ -79,6 +82,8 @@ class GameScene: SKScene {
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if doors_areLocked { return }
+        
         let touch = touches.first!
         let position_inScene = touch.location(in: self)
         let touchedNodes = self.nodes(at: position_inScene)
@@ -94,17 +99,18 @@ class GameScene: SKScene {
         }
     }
     
+    //guessDoor must be before enterDoor to avoid bug (doors are not locked when player guess incorrectly)
     private func touchLeftDoor(){
-        enterDoor(leftDoor)
         gameController?.guessLeftDoor()
+        enterDoor(leftDoor)
     }
     private func touchCenterDoor(){
-        enterDoor(centerDoor)
         gameController?.guessCenterDoor()
+        enterDoor(centerDoor)
     }
     private func touchRightDoor(){
-        enterDoor(rightDoor)
         gameController?.guessRightDoor()
+        enterDoor(rightDoor)
     }
     private func enterDoor(_ door: SKNode, duration: TimeInterval = 2.0){
         let zoomInAction = SKAction.scale(to: 0.2, duration: duration)
@@ -119,6 +125,16 @@ class GameScene: SKScene {
         }
         gameController?.playSFX_playerOpenDoor()
         restrictTimeSpent_inRoom()
+        
+        lockDoors_ifPlayerGuessedIncorrectly()
+    }
+    private func lockDoors_ifPlayerGuessedIncorrectly(){
+        guard let guesses_areCorrect = gameController?.playerGuesses_areCorrect() else {return}
+        if guesses_areCorrect == true{
+            doors_areLocked = false
+        }else{
+            doors_areLocked = true
+        }
     }
     private func resetCameraPosition(){
         let duration = 0.1
