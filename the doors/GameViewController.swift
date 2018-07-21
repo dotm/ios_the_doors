@@ -193,6 +193,7 @@ protocol GameController {
     
     func playSFX_playerOpenDoor()
     func playSFX_killerOpenDoor()
+    func getSFXDuration_killerOpenDoor() -> TimeInterval
 }
 extension GameViewController: GameController {
     func gameOver(){
@@ -230,6 +231,9 @@ extension GameViewController: GameController {
     }
     func playSFX_killerOpenDoor() {
         killerOpenDoorSFX.play()
+    }
+    func getSFXDuration_killerOpenDoor() -> TimeInterval {
+        return killerOpenDoorSFX.duration
     }
     
 }

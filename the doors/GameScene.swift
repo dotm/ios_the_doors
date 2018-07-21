@@ -42,27 +42,36 @@ class GameScene: SKScene {
         let uncover = SKAction.fadeAlpha(to: 0, duration: animationDuration)
         blackCover.run(uncover)
         
-        let delay_toSyncWith_animation = 1.2
+        let delay_toSyncWith_animation = 0.0
         DispatchQueue.main.asyncAfter(deadline: .now() + delay_toSyncWith_animation) {
             self.gameController?.playSFX_playerOpenDoor()
-            self.init_Timers()
+            self.restrictTimeSpent_inRoom()
         }
     }
     
-    func init_Timers(){
+    override func willMove(from view: SKView) {
+        invalidateAllTimers()
+    }
+    
+    func restrictTimeSpent_inRoom(){
+        invalidateAllTimers()
+        setTimers()
+    }
+    func invalidateAllTimers(){
         if killerComesTimer != nil {
             killerComesTimer.invalidate()
         }
         if deathTimer != nil {
             deathTimer.invalidate()
         }
-
+    }
+    func setTimers(){
         let time_whenKillerComes = 7.0
         killerComesTimer = Timer.scheduledTimer(withTimeInterval: time_whenKillerComes, repeats: false) { (timer) in
             self.gameController?.playSFX_killerOpenDoor()
         }
         
-        let killerOpenDoor_time = 5.0
+        let killerOpenDoor_time = gameController?.getSFXDuration_killerOpenDoor() ?? 3.0
         let gameOverTime = time_whenKillerComes + killerOpenDoor_time + 2.0
         deathTimer = Timer.scheduledTimer(withTimeInterval: gameOverTime, repeats: false, block: { (timer) in
             self.gameController?.gameOver()
@@ -109,7 +118,7 @@ class GameScene: SKScene {
             self.resetCameraPosition()
         }
         gameController?.playSFX_playerOpenDoor()
-        init_Timers()
+        restrictTimeSpent_inRoom()
     }
     private func resetCameraPosition(){
         let duration = 0.1
