@@ -50,6 +50,7 @@ class GameViewController: UIViewController {
         bgmPlayer.play()
         bgmPlayer.setVolume(0.5, fadeDuration: 20)
         
+        if introSFX.isPlaying { introSFX.stop() }
         introSFX.play()
         
         round = 1

@@ -16,6 +16,7 @@ class GameScene: SKScene {
     private var centerDoor: SKSpriteNode!
     private var cameraNode: SKCameraNode!
     private var blackCover: SKShapeNode!
+    private var doorsAreLockedLabel: SKLabelNode!
     private var killerComesTimer: Timer!
     private var deathTimer: Timer!
     private var doors_areLocked = false
@@ -28,8 +29,10 @@ class GameScene: SKScene {
         leftDoor = self.childNode(withName: "leftDoor") as! SKSpriteNode
         rightDoor = self.childNode(withName: "rightDoor") as! SKSpriteNode
         centerDoor = self.childNode(withName: "centerDoor") as! SKSpriteNode
-        
+        doorsAreLockedLabel = self.childNode(withName: "doorsAreLockedLabel") as! SKLabelNode
         blackCover = self.childNode(withName: "blackCover") as! SKShapeNode
+        
+        doorsAreLockedLabel.alpha = 0
         
         cameraNode = SKCameraNode()
         cameraNode.position = CGPoint(x: 0, y: 0)
@@ -82,7 +85,10 @@ class GameScene: SKScene {
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if doors_areLocked { return }
+        if doors_areLocked {
+            glitchLabel(interval: 1)
+            return
+        }
         
         let touch = touches.first!
         let position_inScene = touch.location(in: self)
@@ -96,6 +102,19 @@ class GameScene: SKScene {
             case "rightDoor": touchRightDoor()
             default: break
             }
+        }
+    }
+    private func glitchLabel(interval glitchInterval: Double){
+        let blinkInterval = 0.1
+        let glitchTimer = Timer.scheduledTimer(withTimeInterval: blinkInterval, repeats: true) { (timer) in
+            self.doorsAreLockedLabel.alpha = 1
+            let uncover = SKAction.fadeAlpha(to: 0, duration: 0.001)
+            self.doorsAreLockedLabel.run(uncover)
+        }
+        
+        Timer.scheduledTimer(withTimeInterval: glitchInterval, repeats: false) { (timer) in
+            glitchTimer.invalidate()
+            self.doorsAreLockedLabel.alpha = 0
         }
     }
     
