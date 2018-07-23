@@ -2,12 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "wall_mid_blood.jpg",
+      "filename" : "start_scene01.jpg",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "wall_big_blood.jpg",
       "scale" : "2x"
     },
     {

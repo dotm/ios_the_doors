@@ -31,7 +31,7 @@ class GameStartScene: SKScene {
         
         let median = getMedianPosition(array: hints)
         let xPosition = ((Double(index) - median) * 60) + (boxWidth / 2)
-        box.position = CGPoint(x: xPosition, y: 0)
+        box.position = CGPoint(x: xPosition, y: 70)
         box.zPosition = 10
         
         box.name = "box_1"
