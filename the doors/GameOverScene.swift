@@ -52,11 +52,11 @@ class GameOverScene: SKScene {
             self.playDeathSFXS()
         }
         
-        let longestDeathSFX_duration: Double = {
-            let sfxs_duration: [Double] = death_SFXArray.map({ (sfx) -> Double in sfx.duration })
-            return sfxs_duration.max()!
-        }()
-        let enableReplayGame_delay = deathDelay + longestDeathSFX_duration + 1.0
+//        let longestDeathSFX_duration: Double = {
+//            let sfxs_duration: [Double] = death_SFXArray.map({ (sfx) -> Double in sfx.duration })
+//            return sfxs_duration.max()!
+//        }()
+        let enableReplayGame_delay = deathDelay + 5.0
         Timer.scheduledTimer(withTimeInterval: enableReplayGame_delay, repeats: false) { (timer) in
             self.enableReplayingGame = true
         }

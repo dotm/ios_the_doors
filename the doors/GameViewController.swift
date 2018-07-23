@@ -44,6 +44,7 @@ class GameViewController: UIViewController {
         print("Game Start")
         
         let infinity = -1
+        bgmPlayer.currentTime = 0
         bgmPlayer.numberOfLoops = infinity
         bgmPlayer.volume = 0.01
         bgmPlayer.play()
