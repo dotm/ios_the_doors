@@ -14,12 +14,19 @@ class GameOverScene: SKScene {
     private var gameOverWall: SKSpriteNode!
     private var blackCover: SKShapeNode!
     private var deathBlood: SKSpriteNode!
+    private var cameraNode: SKCameraNode!
     private var impendingDeath_SFXArray: [AVAudioPlayer] = []
     private var death_SFXArray: [AVAudioPlayer] = []
     var gameController: GameController?
     private var enableReplayingGame = false
     
     override func didMove(to view: SKView) {
+        cameraNode = SKCameraNode()
+        cameraNode.position = CGPoint(x: 0, y: 0)
+        self.addChild(cameraNode)
+        self.camera = cameraNode
+        cameraNode.setScale(0.8)
+        
         enableReplayingGame = false
         
         blackCover = self.childNode(withName: "blackCover") as! SKShapeNode

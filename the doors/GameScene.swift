@@ -39,8 +39,8 @@ class GameScene: SKScene {
         cameraNode.setScale(1.5)
         blackCover.alpha = 1
         
-        let animationDuration = 1.3
-        let zoomInAction = SKAction.scale(to: 1, duration: animationDuration)
+        let animationDuration = 1.5
+        let zoomInAction = SKAction.scale(to: 0.8, duration: animationDuration)
         cameraNode.run(zoomInAction)
         let uncover = SKAction.fadeAlpha(to: 0, duration: animationDuration)
         blackCover.run(uncover)
@@ -138,7 +138,7 @@ class GameScene: SKScene {
     }
     private func resetCameraPosition(){
         let duration = 0.1
-        let zoomOutAction = SKAction.scale(to: 1, duration: duration)
+        let zoomOutAction = SKAction.scale(to: 0.8, duration: duration)
         let centerPosition = CGPoint(x: 0, y: 0)
         let resetCenter = SKAction.move(to: centerPosition, duration: duration)
         
